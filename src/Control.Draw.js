@@ -2,6 +2,15 @@ L.Map.mergeOptions({
 	drawControl: false
 });
 
+L.Control.turnEditionOnLayer = function(e) {
+  // TODO: turnOfEditinOnAllLayers()
+
+  if (e.target.editing === undefined) { return }
+  if (e.target.editing !== undefined && !e.target.editing.enabled()) {
+    e.target.editing.enable();
+  }
+}
+
 L.Control.Draw = L.Control.extend({
 
 	options: {
@@ -19,6 +28,53 @@ L.Control.Draw = L.Control.extend({
 	onAdd: function (map) {
 		var className = 'leaflet-control-draw',
 			container = L.DomUtil.create('div', className);
+
+
+
+
+
+
+    L.DomEvent.addListener(window, 'keydown', function(e) {
+      if (e.keyCode === 27) {
+        // TODO: move to a method
+        for (var key in map._layers) {
+          var layer = map._layers[key];
+          if (layer.editing !== undefined) {
+            layer.editing.disable();
+          }
+        }
+      }
+    });
+
+    map.on('click', function(e) {
+        // TODO: move to a method
+      for (var key in map._layers) {
+        var layer = map._layers[key];
+        if (layer.editing !== undefined) {
+          layer.editing.disable();
+        }
+      }
+    });
+
+    this._turnEditionOn = function(shape) {
+      if (!shape.editing.enabled()) {
+        shape.editing.enable();
+      }
+    }
+
+    // Add edition on/off on editable shapes, on clicking on them
+    map.on('layeradd', function(e) {
+      console.log('layeradd');
+      if (e.layer.editing === undefined) { return }
+      e.layer.off('click', L.Control.turnEditionOnLayer);
+      e.layer.on('click', L.Control.turnEditionOnLayer);
+    });
+
+
+
+
+
+
 
 		if (this.options.drawPolyline) {
 			this.handlers.polyline = new L.Polyline.Draw(map, this.options.styles.polyline);

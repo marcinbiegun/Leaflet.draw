@@ -38,6 +38,13 @@
 			}
 		});
 		map.addControl(drawControl);
+
+    var existingShape = new L.Polygon([
+      new L.LatLng(-37.775, 175.2756),
+      new L.LatLng(-37.7772, 175.2756),
+      new L.LatLng(-37.7772, 175.279)
+    ]);
+    map.addLayer(existingShape);
 		
 		var drawnItems = new L.LayerGroup();
 		map.on('draw:poly-created', function (e) {
