@@ -1,3 +1,12 @@
+#About this fork
+I've added edition for polygons. To use this, pass following parameters to drawing options:
+
+````
+var options = {
+  edition: true
+}
+````
+
 #Leaflet.draw
 Adds support for drawing polys to Leaflet.
 

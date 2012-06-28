@@ -17,32 +17,34 @@ L.Control.Draw = L.Control.extend({
 
 	handlers: {},
 
-	disableEditingOnEscapeKey: function(e) {
+	disableEditingOnEscapeKey: function (e) {
 		if (e.keyCode === 27) {
 			this.disableEditingOnAllLayers();
 		}
 	},
 
-	disableEditingOnAllLayers: function() {
+	disableEditingOnAllLayers: function () {
 		for (var key in this._map._layers) {
-			var layer = this._map._layers[key];
-			if (layer.editing !== undefined) {
-				layer.editing.disable();
+			if (this._map._layers.hasOwnProperty(key)) {
+				var layer = this._map._layers[key];
+				if (layer.editing !== undefined) {
+					layer.editing.disable();
+				}
 			}
 		}
 	},
 
-	enableEditingOnLayer: function(e) {
+	enableEditingOnLayer: function (e) {
 		var layer = e.target;
-		if (layer.editing === undefined) { return }
+		if (layer.editing === undefined) { return; }
 		this.disableEditingOnAllLayers();
 		if (!layer.editing.enabled()) {
 			layer.editing.enable();
 		}
 	},
 
-	addEditionEvents: function(e) {
-		if (e.layer.editing === undefined) { return }
+	addEditionEvents: function (e) {
+		if (e.layer.editing === undefined) { return; }
 		L.DomEvent.removeListener(e.layer, 'click', this.enableEditingOnLayer, this);
 		L.DomEvent.addListener(e.layer, 'click', this.enableEditingOnLayer, this);
 	},
