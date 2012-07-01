@@ -566,8 +566,15 @@ L.Control.Draw = L.Control.extend({
 	},
 
 	enableEditingOnLayer: function (e) {
-		var layer = e.target;
-		if (layer.editing === undefined) { return; }
+		var layer;
+		if (e.target.editing !== undefined) {
+			layer = e.target;
+		} else if (e.layer.editing !== undefined) {
+			layer = e.layer;
+		} else {
+			return;
+		}
+
 		this.disableEditingOnAllLayers();
 		if (!layer.editing.enabled()) {
 			layer.editing.enable();
